@@ -4,12 +4,15 @@ Widget headtable({required String title, required BuildContext context,required 
   var sizew = MediaQuery.of(context).size.width;
   return Container(
     child: Center(
-      child: Text(
-        title,
-        style: TextStyle(
-            color: color,
-            fontSize: 17,
-            fontWeight: FontWeight.bold),
+      child: Container(
+        width:120,
+        child: Text(
+          title,
+          style: TextStyle(
+              color: color,
+              fontSize: 16,
+              fontWeight: FontWeight.bold),textAlign: TextAlign.center,
+        ),
       ),
     ),
     width: sizew >= 800 ? 170 : 115,
