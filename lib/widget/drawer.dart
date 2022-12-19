@@ -27,10 +27,10 @@ Widget Drawers(BuildContext context) {
                   children: [
                     Image.asset(
                       'assets/logoTHS.png',
-                      width: size.width * 0.075,
+                      width: 120
                     ),
                     Container(
-                      width: size.width * 0.085,
+                      width: 140,
                       child: Text(
                         "Bienvenu à l'espace administrateur",
                         textAlign: TextAlign.center,

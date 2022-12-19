@@ -16,9 +16,7 @@ class Rapport extends StatefulWidget {
 class _RapportState extends State<Rapport> {
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery
-        .of(context)
-        .size;
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
@@ -58,12 +56,12 @@ class _RapportState extends State<Rapport> {
                           Container(
                             child: Center(
                                 child: Text(
-                                  'choisir une date',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.grey),
-                                  textAlign: TextAlign.center,
-                                )),
+                              'choisir une date',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey),
+                              textAlign: TextAlign.center,
+                            )),
                             width: size.width * 0.2,
                             height: 45,
                             decoration: BoxDecoration(
@@ -81,65 +79,24 @@ class _RapportState extends State<Rapport> {
                         ],
                       ),
                     ),
-
                   ],
                 ),
-
                 Padding(
                   padding: const EdgeInsets.only(top: 10),
                   child: Carddescrapport(
-                      context: context, text: 'Hazem Bouaziz',
-                      widget:
-                      Expanded(
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("B2C_2201_CHT_097",style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold,),),
-                                SizedBox(width: 10,),
-                                Text("31500079",style: TextStyle(fontSize: 13,fontWeight: FontWeight.bold,color:Colors.grey[500]),),
-                                SizedBox(width: 330,),
-                                Icon(Icons.picture_as_pdf,color: Colors.red,),
-                                SizedBox(width: 10,),
-                                Icon(Icons.explicit_sharp,color: Colors.green,),
-                                SizedBox(width: 10,),
-                                Icon(Icons.download_rounded),
-                              ],
-                            ),
-                            SizedBox(height:5),
-                            Divider(
-                                color: Colors.black
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("B2C_2201_CHT_097",style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold,),),
-                                SizedBox(width: 10,),
-                                Text("31500079",style: TextStyle(fontSize: 13,fontWeight: FontWeight.bold,color:Colors.grey[500]),),
-                                SizedBox(width: 330,),
-                                Icon(Icons.picture_as_pdf,color: Colors.red,),
-                                SizedBox(width: 10,),
-                                Icon(Icons.explicit_sharp,color: Colors.green,),
-                                SizedBox(width: 10,),
-                                Icon(Icons.download_rounded),
-                              ],
-                            ),
-                            SizedBox(height:5),
-                            Divider(
-                                color: Colors.black
-                            ),
-                          ],
-                        ),
-                      )
-
-
-                  ),
+                      context: context,
+                      text: 'Hazem Bouaziz',
+                      widget: Expanded(
+                          child: Column(
+                        children: [
+                          CardContent(context: context),
+                          CardContent(context: context),
+                        ],
+                      ))),
                 ),
               ],
             ),
           ),
-
         ),
       ),
     );

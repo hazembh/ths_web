@@ -23,7 +23,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home:SplitViewRapport(),
-      
+           // home:MyHomePage(),
+
       routes: {
         '/dashboard': (context) => SplitViewdash(),
         '/rapport': (context) => SplitViewRapport(),
