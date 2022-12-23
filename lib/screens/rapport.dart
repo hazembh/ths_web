@@ -27,7 +27,7 @@ class _RapportState extends State<Rapport> {
           AppBars(),
         ],
       ),
-      drawer: widget.b ? Drawers(context) : null,
+      drawer: widget.b ? Drawers(context: context) : null,
       body: Center(
         child: CardWidget(
           h: size.height * 0.75,

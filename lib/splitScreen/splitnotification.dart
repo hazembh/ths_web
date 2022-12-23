@@ -18,7 +18,7 @@ class SplitViewNotification extends StatelessWidget {
         children: [
           SizedBox(
             width: screenWidth*0.2,
-            child: Drawers(context),
+            child: Drawers(context: context),
           ),
           Expanded(
             child:Notifications(b:false),
@@ -30,7 +30,7 @@ class SplitViewNotification extends StatelessWidget {
         body: Notifications(b: true,),
         drawer: SizedBox(
           width: screenWidth*0.5,
-          child: Drawer(child: Drawers(context),),
+          child: Drawer(child: Drawers(context: context),),
         ),
       );
     }

@@ -18,7 +18,7 @@ class SplitViewdash extends StatelessWidget {
         children: [
           SizedBox(
             width: screenWidth*0.2,
-            child: Drawers(context),
+            child: Drawers(context: context),
           ),
           Expanded(
             child:Dashboard(b:false),
@@ -30,7 +30,7 @@ class SplitViewdash extends StatelessWidget {
         body: Dashboard(b:true,),
         drawer: SizedBox(
           width: screenWidth*0.5,
-          child: Drawer(child: Drawers(context),),
+          child: Drawer(child: Drawers(context: context),),
         ),
       );
     }

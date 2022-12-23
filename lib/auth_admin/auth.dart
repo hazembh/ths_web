@@ -1,4 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ths_web/View_Model/condition.dart';
+import 'package:ths_web/View_Model/validation.dart';
+import 'package:ths_web/home.dart';
+import 'package:ths_web/splitScreen/splitdashboard.dart';
 
 class Auth_Admin extends StatefulWidget {
   const Auth_Admin({Key? key}) : super(key: key);
@@ -8,8 +14,12 @@ class Auth_Admin extends StatefulWidget {
 }
 
 class _Auth_AdminState extends State<Auth_Admin> {
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+  bool passwordobscured = true;
   @override
   Widget build(BuildContext context) {
+
     var size = MediaQuery.of(context).size;
     return Scaffold(
         backgroundColor: Colors.white,
@@ -74,6 +84,7 @@ class _Auth_AdminState extends State<Auth_Admin> {
                                   left: size.width * 0.03,
                                   right: size.width * 0.03),
                               child: TextField(
+                                controller: email,
                                 decoration: InputDecoration(
                                   prefixIcon: Icon(Icons.email),
                                   border: OutlineInputBorder(
@@ -101,8 +112,20 @@ class _Auth_AdminState extends State<Auth_Admin> {
                                   left: size.width * 0.03,
                                   right: size.width * 0.03),
                               child: TextField(
+                                controller: password,
+                                obscureText: passwordobscured,
                                 decoration: InputDecoration(
                                   prefixIcon: Icon(Icons.lock),
+
+                                    suffixIcon: IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          passwordobscured = !passwordobscured;
+                                        });
+                                      },
+                                      icon: Icon(
+                                          passwordobscured ? Icons.visibility_off : Icons.visibility),
+                                    ),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(5.0),
                                   ),
@@ -116,7 +139,9 @@ class _Auth_AdminState extends State<Auth_Admin> {
                                 width: size.width * 0.24,
                                 height: 40,
                                 child: RaisedButton(
-                                  onPressed: () {Navigator.pushNamed(context, '/dashboard');},
+                                  onPressed: () {
+                                    validation(context, email, password,loginUser(context, email, password, SplitViewdash()));
+                                    },
                                   color: Color.fromRGBO(0, 36, 147, 0.75),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(8)),
@@ -173,3 +198,47 @@ class _Auth_AdminState extends State<Auth_Admin> {
         ));
   }
 }
+
+loginUser(BuildContext context, TextEditingController email,
+    TextEditingController password, Widget fct1) async {
+  bool hasException = false;
+
+  try {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email.text.trim(),
+      password: password.text.trim(),
+    );
+  } on FirebaseException catch (e) {
+    hasException = true;
+    if (e.code == 'user-not-found') {
+      ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
+          backgroundColor: Colors.red,
+          content: Snack(text: 'Utilisateur non reconnu', context: context)));
+      Navigator.pop(context);
+    } else if (e.code == 'wrong-password') {
+      ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
+          backgroundColor: Colors.red,
+          content: Snack(text: 'Mot de passe erroné', context: context)));
+      Navigator.pop(context);
+    }
+  } finally {
+    if (!hasException && email.text.trim()== 'admin@admin.com') {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (_) => fct1));
+    }
+  }
+}
+
+Widget Snack({required String text, required BuildContext context}) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Text(text,
+          style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold))
+    ],
+  );
+}
+
+

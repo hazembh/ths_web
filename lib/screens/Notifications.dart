@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ths_web/screens/dashboard.dart';
 import 'package:ths_web/screens/rapport.dart';
@@ -19,6 +21,7 @@ class _NotificationsState extends State<Notifications> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    late UserCredential userCredential;
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
@@ -29,7 +32,7 @@ class _NotificationsState extends State<Notifications> {
           AppBars(),
         ],
       ),
-      drawer: widget.b ? Drawers(context) : null,
+      drawer: widget.b ? Drawers(context: context) : null,
       body: Container(
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
@@ -46,36 +49,33 @@ class _NotificationsState extends State<Notifications> {
                     title: "Création de compte",
                     widget: Column(
                       children: [
-                        ContentNotifcationCard(
-                            b: false,
-                            idclient: 'B2C_2201_CHT_097',
-                            nom: 'Hazem bouaziz',
-                            date: '12/12/2022',
-                            action: 'fait',
-                            cin: '11117999',
-                            check: () {},
-                            delete: () {}),
-                        ContentNotifcationCard(
-                            b: false,
-                            idclient: 'B2C_2201_CHT_097',
-                            nom: 'Hazem bouaziz',
-                            date: '12/12/2022',
-                            action: 'fait',
-                            cin: '11117999',
-                            check: () {},
-                            delete: () {}),
-                        ContentNotifcationCard(
-                            b: false,
-                            idclient: 'B2C_2201_CHT_097',
-                            nom: 'Hazem bouaziz',
-                            date: '12/12/2022',
-                            action: 'fait',
-                            cin: '11117999',
-                            check: () {},
-                            delete: () {}),
-                        //ContentNotifcationCard(),
-                        //ContentNotifcationCard(),
-                        //ContentNotifcationCard()
+
+                        StreamBuilder(
+                          stream: FirebaseFirestore.instance.collection('UserCompte').snapshots(),
+                          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+
+                            return ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: snapshot.data!.docs.length,
+                              itemBuilder: (context, index) {
+                                return
+                                  ContentNotifcationCard(
+                                    b: false,
+                                    idclient: '',
+                                    nom: snapshot.data!.docs[index]['Nom et prenom '],
+                                    date: snapshot.data!.docs[index]['createdAt'],
+                                    action: 'fait',
+                                    cin: snapshot.data!.docs[index]['CIN'],
+                                    check: () async {
+                                       await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                                          email: snapshot.data!.docs[index]['email'], password: snapshot.data!.docs[index]['Mot de passe ']);
+                                    },
+                                    delete: () {});
+
+                              },
+                            );
+                          },
+                        ),
                       ],
                     )),
                 SizedBox(

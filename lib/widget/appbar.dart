@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 Widget AppBars (){
+  var user = FirebaseAuth.instance.currentUser;
   return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -13,7 +15,7 @@ Widget AppBars (){
                   ),
                   Padding(
                     padding: const EdgeInsets.only(right:10),
-                    child: Text('admin@admin.com',
+                    child: Text(user!.email.toString(),
                         style: TextStyle(color: Colors.black)),
                   ),
                 ],

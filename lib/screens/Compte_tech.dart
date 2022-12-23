@@ -26,7 +26,7 @@ class _Compte_TechState extends State<Compte_Tech> {
             AppBars(),
           ],
         ),
-        drawer: widget.b ? Drawers(context) : null,
+        drawer: widget.b ? Drawers(context: context) : null,
         body: Center(
           child: Column(
             children: [

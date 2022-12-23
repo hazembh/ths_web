@@ -1,15 +1,20 @@
 import 'dart:io';
 import 'dart:ui';
 import 'dart:math' as math;
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expansion_widget/expansion_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:ths_web/View_Model/senddata.dart';
+import 'package:ths_web/widget/showdialog.dart';
 
-Widget Drawers(BuildContext context) {
+Widget Drawers({required BuildContext context}) {
   bool? _expanded2;
   int selectedPage;
   var size = MediaQuery.of(context).size;
+  TextEditingController message = TextEditingController();
   return Theme(
     data: Theme.of(context).copyWith(
       canvasColor: Colors.grey[400],
@@ -25,10 +30,7 @@ Widget Drawers(BuildContext context) {
               children: [
                 Row(
                   children: [
-                    Image.asset(
-                      'assets/logoTHS.png',
-                      width: 120
-                    ),
+                    Image.asset('assets/logoTHS.png', width: 120),
                     Container(
                       width: 140,
                       child: Text(
@@ -66,90 +68,133 @@ Widget Drawers(BuildContext context) {
             height: size.height * 0.03,
           ),
           Carddesc(
-            context,
-            Content(
+            context: context,
+            widget: Content(
                 text: 'Accueil',
                 icon: Icons.home,
                 ontap: () {
-                   Navigator.pushReplacementNamed(context, '/dashboard');
+                  Navigator.pushReplacementNamed(context, '/dashboard');
                 },
                 context: context),
-            false,
-            SizedBox(),
+            b: false,
+            widget2: SizedBox(),
+            controller: message,
+            widget3: SizedBox(),
           ),
           Carddesc(
-              context,
-              Content(
-                  text: 'Notifications',
-                  icon: Icons.notifications,
-                  ontap: () {
-                     Navigator.pushReplacementNamed(context, '/Notification');
-                  },
-                  context: context),
-              false,
-              SizedBox()),
+            context: context,
+            widget: Content(
+                text: 'Notifications',
+                icon: Icons.notifications,
+                ontap: () {
+                  Navigator.pushReplacementNamed(context, '/Notification');
+                },
+                context: context),
+            b: false,
+            widget2: SizedBox(),
+            controller: message,
+            widget3: SizedBox(),
+          ),
           Carddesc(
-              context,
-              Content(
+              context: context,
+              widget: Content(
                   text: 'Affectation des tâches',
                   icon: Icons.date_range,
                   ontap: () {
                     Navigator.pushNamed(context, '/tache');
                   },
                   context: context),
-              false,
-              SizedBox()),
+              b: false,
+              widget2: SizedBox(),
+              controller: message,
+              widget3: SizedBox()),
           Carddesc(
-            context,
-            Content(
+            context: context,
+            widget: Content(
                 text: 'Message à diffuser',
                 icon: Icons.message,
                 ontap: () {},
                 context: context),
-            true,
-            IconButton(
+            b: true,
+            controller: message,
+            widget2: IconButton(
               icon: Icon(
                 Icons.attach_file,
                 size: 20,
               ),
               onPressed: () {
                 _imgFromGallery(context);
+
               },
+            ),
+            widget3: Padding(
+              padding: EdgeInsets.only(
+                  bottom: size.width * 0.008, top: size.width * 0.008),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  buttonValiderAnuller(
+                      val: 'Annuler',
+                      color1: Colors.red,
+                      color2: Colors.white,
+                      onTap: () async {
+                       await Navigator.pushNamed(context, '/dashboard');
+
+                      }),
+                  buttonValiderAnuller(
+                      val: 'Envoyer',
+                      color1: Color.fromRGBO(0, 36, 147, 0.8),
+                      color2: Colors.white,
+                      onTap: () async  {
+                         await message.text.toString() !="" ? SendMessage(context, message):null;
+                         await message.text.toString() !="" ? ShowMyDialog2(context):null;
+                      })
+                ],
+              ),
             ),
           ),
           Carddesc(
-              context,
-              Content(
-                  text: 'Comptes des techniciens',
-                  icon: Icons.account_circle,
-                  ontap: () {
-                     Navigator.pushNamed(context,'/compte_tech');
-                  },
-                  context: context),
-              false,
-              SizedBox()),
+            context: context,
+            widget: Content(
+                text: 'Comptes des techniciens',
+                icon: Icons.account_circle,
+                ontap: () {
+                  Navigator.pushNamed(context, '/compte_tech');
+                },
+                context: context),
+            b: false,
+            widget2: SizedBox(),
+            controller: message,
+            widget3: SizedBox(),
+          ),
           Carddesc(
-              context,
-              Content(
-                  text: 'Rapports',
-                  icon: Icons.article,
-                  ontap: () {
-                      Navigator.pushNamed(context, '/rapport');
-                  },
-                  context: context),
-              false,
-              SizedBox()),
+            controller: message,
+            context: context,
+            widget: Content(
+                text: 'Rapports',
+                icon: Icons.article,
+                ontap: () {
+                  Navigator.pushNamed(context, '/rapport');
+                },
+                context: context),
+            b: false,
+            widget2: SizedBox(),
+            widget3: SizedBox(),
+          ),
           Carddesc(
-              context,
-              Content(
-                  text: 'Déconnexion',
-                  icon: Icons.logout,
-                  ontap: () {
-                    Navigator.pushReplacementNamed(context, '/login');
-                  },
-                  context: context),
-              false,
-              SizedBox()),
+            context: context,
+            widget: Content(
+                text: 'Déconnexion',
+                icon: Icons.logout,
+                ontap: () {
+                  Navigator.pushReplacementNamed(context, '/login');
+                },
+                context: context),
+            b: false,
+            widget2: SizedBox(),
+            controller: message,
+            widget3: SizedBox(),
+          ),
         ],
       ),
     ),
@@ -176,7 +221,7 @@ Widget Content(
     required String text,
     required BuildContext context,
     required Function ontap}) {
-        var size = MediaQuery.of(context).size;
+  var size = MediaQuery.of(context).size;
   return ListTile(
     tileColor: Colors.white,
     leading: Icon(
@@ -185,7 +230,7 @@ Widget Content(
     ),
     title: Text(
       text,
-      style: TextStyle(color: Colors.black,fontSize: 14),
+      style: TextStyle(color: Colors.black, fontSize: 14),
     ),
     onTap: () {
       ontap();
@@ -193,9 +238,16 @@ Widget Content(
   );
 }
 
-Widget Carddesc(BuildContext context, Widget widget, bool b, Widget widget2) {
+Widget Carddesc(
+    {required BuildContext context,
+    required Widget widget,
+    required bool b,
+    required Widget widget2,
+    required TextEditingController controller,
+    required Widget widget3}) {
   bool? _expanded2;
   var size = MediaQuery.of(context).size;
+
   return Card(
     clipBehavior: Clip.hardEdge,
     child: ExpansionWidget(
@@ -238,6 +290,7 @@ Widget Carddesc(BuildContext context, Widget widget, bool b, Widget widget2) {
                 ],
               ),
               TextField(
+                controller: controller,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(5.0),
@@ -248,25 +301,7 @@ Widget Carddesc(BuildContext context, Widget widget, bool b, Widget widget2) {
                 ),
                 maxLines: 5,
               ),
-              Padding(
-                padding: EdgeInsets.only(
-                    bottom: size.width * 0.008, top: size.width * 0.008),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    buttonValiderAnuller(
-                        val: 'Annuler',
-                        color1: Colors.red,
-                        color2: Colors.white,
-                        onTap: () {}),
-                    buttonValiderAnuller(
-                        val: 'Envoyer',
-                        color1: Color.fromRGBO(0, 36, 147, 0.8),
-                        color2: Colors.white,
-                        onTap: () {})
-                  ],
-                ),
-              ),
+              widget3,
             ],
           ),
         )),

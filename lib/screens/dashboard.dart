@@ -31,7 +31,7 @@ class _DashboardState extends State<Dashboard> {
           AppBars(),
         ],
       ),
-      drawer: widget.b ? Drawers(context) : null,
+      drawer: widget.b ? Drawers(context: context) : null,
       body: Column(
         children: [
           Row(

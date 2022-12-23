@@ -19,7 +19,7 @@ class SplitViewtache extends StatelessWidget {
         children: [
           SizedBox(
             width: screenWidth*0.2,
-            child: Drawers(context),
+            child: Drawers(context:context),
           ),
           Expanded(
             child:Tache(b: false,),
@@ -31,7 +31,7 @@ class SplitViewtache extends StatelessWidget {
         body: Tache(b:true),
         drawer: SizedBox(
           width: screenWidth*0.5,
-          child: Drawer(child: Drawers(context),),
+          child: Drawer(child: Drawers(context: context),),
         ),
       );
     }
